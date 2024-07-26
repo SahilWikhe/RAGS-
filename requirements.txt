@@ -1,0 +1,11 @@
+pandas
+numpy
+faiss-cpu
+torch
+transformers
+sentence
+langchain
+langchain-community
+pandas
+openpyxl
+faiss-cpu
