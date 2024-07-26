@@ -58,4 +58,10 @@ class RAGSystem:
         text_splitter = CharacterTextSplitter(chunk_size=1500, chunk_overlap=150)
         texts = text_splitter.split_documents(documents)
         embeddings = HuggingFaceEmbeddings()
-        return FAISS.from_documents(texts, embeddings, index_params={"M": 16, "efConstruction": 200})
+        vector_store = FAISS.from_documents(texts, embeddings)
+        
+        # Configure HNSW index
+        vector_store.index.hnsw.efConstruction = 200
+        vector_store.index.hnsw.M = 16
+        
+        return vector_store
