@@ -25,7 +25,7 @@ class RAGSystem:
         self.qa_chain = RetrievalQA.from_chain_type(
             llm=llm,
             chain_type="stuff",
-            retriever=self.vector_store.as_retriever(),
+            retriever=self.vector_store.as_retriever(search_kwargs={"k": 5}),
             return_source_documents=True
         )
 
@@ -58,10 +58,4 @@ class RAGSystem:
         text_splitter = CharacterTextSplitter(chunk_size=1500, chunk_overlap=150)
         texts = text_splitter.split_documents(documents)
         embeddings = HuggingFaceEmbeddings()
-        vector_store = FAISS.from_documents(texts, embeddings)
-        
-        # Configure HNSW index
-        vector_store.index.hnsw.efConstruction = 200
-        vector_store.index.hnsw.M = 16
-        
-        return vector_store
+        return FAISS.from_documents(texts, embeddings)
